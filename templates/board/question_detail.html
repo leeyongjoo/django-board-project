@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-3">
+    <h2 class="border-bottom py-2">{{ question.subject }}</h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge badge-light p-2">
+                    {{ question.create_date }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
+    {% for answer in question.answer_set.all %}
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge badge-light p-2">
+                    {{ answer.create_date }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <form action="{% url 'board:answer_create' question.id %}" method="post" class="my-3">
+        {% csrf_token %}
+        {% if answer_form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field in answer_form %}
+            {% if field.errors %}
+            <strong>{{ field.label }}</strong>
+            {{ field.errors }}
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <label for="content">답변 내용</label>
+            <textarea class="form-control" name="content"
+                      id="content" rows="5">{{ answer_form.content.value|default_if_none:'' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">답변 등록</button>
+    </form>
+</div>
+{% endblock %}
