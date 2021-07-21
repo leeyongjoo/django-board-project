@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load board_filter %}
+
 {% block content %}
 <div class="container my-3">
     <table class="table">
@@ -14,9 +16,13 @@
         {% if question_list %}
         {% for question in question_list %}
         <tr>
-            <td>{{ forloop.counter }}</td>
+<!--            <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}</td>-->
+            <td>{{ question_list.start_index|add:forloop.counter|sub:1 }}</td>
             <td>
                 <a href="{% url 'board:detail' question.id %}">{{ question.subject }}</a>
+                {% if question.answer_set.count > 0 %}
+                <span class="text-danger small ml-2">{{ question.answer_set.count }}</span>
+                {% endif %}
             </td>
             <td>{{ question.create_date }}</td>
         </tr>
@@ -33,6 +39,9 @@
     <ul class="pagination justify-content-center">
         <!-- 이전페이지 -->
         {% if question_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">처음</a>
+        </li>
         <li class="page-item">
             <a class="page-link" href="?page={{ question_list.previous_page_number }}">이전</a>
         </li>
@@ -59,6 +68,9 @@
         {% if question_list.has_next %}
         <li class="page-item">
             <a class="page-link" href="?page={{ question_list.next_page_number }}">다음</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ last_page }}">끝</a>
         </li>
         {% else %}
         <li class="page-item disabled">
