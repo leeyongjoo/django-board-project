@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
@@ -10,8 +11,17 @@ def index(request):
     """
     게시판 목록 출력
     """
+    # 게시판 목록 조회(내림차순)
     question_list = Question.objects.order_by('-create_date')
-    context = {'question_list': question_list}
+
+    # 페이징 처리
+    page = request.GET.get('page', 1)
+    paginator = Paginator(question_list, 10) # 한 페이지 당 10개씩
+    page_obj = paginator.get_page(page)
+
+    print(page_obj.paginator.page_range)
+
+    context = {'question_list': page_obj}
     return render(request, 'board/question_list.html', context)
 
 
