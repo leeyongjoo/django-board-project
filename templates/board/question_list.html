@@ -17,8 +17,10 @@
         {% if question_list %}
         {% for question in question_list %}
         <tr class="text-center">
-<!--            <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}</td>-->
+            <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}</td>
+            {% comment %} 오름차순 정렬
             <td>{{ question_list.start_index|add:forloop.counter|sub:1 }}</td>
+            {% endcomment %}
             <td class="text-left">
                 <a href="{% url 'board:detail' question.id %}">{{ question.subject }}</a>
                 {% if question.answer_set.count > 0 %}

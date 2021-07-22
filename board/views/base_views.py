@@ -9,8 +9,8 @@ def index(request):
     """
     게시판 목록 출력
     """
-    # 게시판 목록 조회(오름차순)
-    question_list = Question.objects.order_by('create_date')
+    # 게시판 목록 조회(내림차순)
+    question_list = Question.objects.order_by('-create_date')
 
     # 페이징 처리
     page = request.GET.get('page', 1)
