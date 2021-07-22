@@ -13,7 +13,7 @@
     <form method="post" class="post-form" action="{% url 'common:login' %}">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
-        {% include "common/form_errors.html" %}
+        {% include "form_errors.html" %}
         <div class="form-group">
             <label for="username">사용자ID</label>
             <input type="text" class="form-control" name="username" id="username"
