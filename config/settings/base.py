@@ -188,5 +188,9 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'board': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
     }
 }
