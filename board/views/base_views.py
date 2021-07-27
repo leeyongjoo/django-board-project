@@ -14,7 +14,6 @@ def index(request):
     """
     게시판 목록 출력
     """
-    logger.info("INFO 레벨로 출력")
 
     # 입력 파라미터
     page = request.GET.get('page', '1')
