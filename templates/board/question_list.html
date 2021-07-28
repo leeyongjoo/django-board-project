@@ -45,7 +45,7 @@
                     {% endcomment %}
                     <td>
                         {% if question.voter.all.count > 0 %}
-                        <span class="badge bg-warning px-2 py-1">{{ question.voter.all.count }}</span>
+                        <span class="badge bg-primary px-2 py-1">{{ question.voter.all.count }}</span>
                         {% endif %}
                     </td>
                     <td class="text-start">
@@ -55,7 +55,7 @@
                         {% endif %}
                     </td>
                     <td>{{ question.author.username }}</td>
-                    <td>{{ question.create_date|date:'Y-m-d H:i'  }}</td>
+                    <td>{{ question.create_date|date:'Y-m-d'  }}</td>
                 </tr>
                 {% endfor %}
                 {% else %}

@@ -3,8 +3,57 @@
 {% load board_filter %}
 
 {% block content %}
-<div class="container my-3">
 
+<article class="blog-post">
+
+    <div class="d-grid gap-2">
+
+        <div class="card g-5">
+            <div class="card-body">
+                <h2 class="blog-post-title">{{ question.subject }}</h2>
+                <h6 class="card-subtitle mb-2 text-muted">{{ question.create_date|date:'Y-m-d H:i' }} by
+                    <b>{{ question.author.username }}</b>
+                    {% if question.modify_date %}(수정: {{ question.modify_date|date:'Y-m-d H:i' }}){% endif %}</h6>
+                <p class="card-text"></p>
+
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a href="#" data-uri="{% url 'board:vote_question' question.id  %}" class="recommend">
+                            <button type="button" class="btn btn-{% if user.is_authenticated %}{% if user in question.voter.all %}primary{% endif %}{% endif %}">
+                                <i class="bi bi-hand-thumbs-up-fill"></i>
+                                <span class="badge bg-light" style="color:black;">{{question.voter.count}}</span>
+                            </button>
+                        </a>
+                    </div>
+                    <div>
+                    <span class="align-middle">
+                    <i class="bi bi-eye-fill"></i> 0
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card gap-1">
+            <div class="card-body">
+                {{ question.content|escape|mark }}
+            </div>
+        </div>
+    </div>
+
+
+    <hr>
+
+
+    <div class="text-end">
+
+    </div>
+
+
+</article>
+
+
+<div class="container my-3">
     <!-- 사용자오류 표시 -->
     {% if messages %}
     <div class="alert alert-danger my-3" role="alert">
@@ -168,6 +217,16 @@ $(document).ready(function(){
 <!--        }-->
     });
 });
+
+
+
+
+
+
+
+
+
+
 
 
 

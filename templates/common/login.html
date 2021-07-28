@@ -1,13 +1,35 @@
 {% include "head.html" %}
 
 
-<body class="text-center">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+    </symbol>
+</svg>
 
+<body class="text-center">
+<div class="text-center mx-auto">
+<div class="row text-center">
+    {% if form.errors %}
+    {% for error in form.errors.values %}
+    <div class="container-sm">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+                <use xlink:href="#exclamation-triangle-fill"/>
+            </svg>
+            <div>
+                {{ error.as_text }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    </div>
+<div>
 <main class="form-signin">
     <form method="post" class="post-form" action="{% url 'common:login' %}">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
-        {% include "form_errors.html" %}
 
         <h1 class="h3 mb-3 fw-normalo"><a href="/" class="text-secondary">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-house-fill"
@@ -16,7 +38,8 @@
                       d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
                 <path fill-rule="evenodd"
                       d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
-            </svg></a>
+            </svg>
+        </a>
         </h1>
 
         <div class="form-floating">
@@ -33,8 +56,10 @@
         <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
     </form>
-</main>
 
+</main>
+</div>
+    </div>
 </body>
 
 <style>
@@ -77,6 +102,7 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
 
 
 </style>
