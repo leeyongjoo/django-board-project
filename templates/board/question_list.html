@@ -25,19 +25,19 @@
 
             <table class="table table-hover">
                 <thead>
-                <tr class="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Like!</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Author</th>
-                    <th scope="col">Create Date</th>
+                <tr class="text-center align-bottom">
+                    <th scope="col" class="col">#</th>
+                    <th scope="col" class="col">Like!</th>
+                    <th scope="col" class="col-5">Title</th>
+                    <th scope="col" class="col">Author</th>
+                    <th scope="col" class="col-md-auto">Create Date</th>
                 </tr>
                 </thead>
                 <tbody>
 
                 {% if question_list %}
                 {% for question in question_list %}
-                <tr class="text-center" onclick="window.location='{% url 'board:detail' question.id %}';">
+                <tr class="text-center align-middle" onclick="window.location='{% url 'board:detail' question.id %}';">
                     <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}
                     </td>
                     {% comment %} 오름차순 정렬
