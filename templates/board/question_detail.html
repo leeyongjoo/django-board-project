@@ -45,10 +45,6 @@
     <hr>
 
 
-    <div class="text-end">
-
-    </div>
-
 
 </article>
 
@@ -56,15 +52,33 @@
 <div class="container my-3">
     <!-- 사용자오류 표시 -->
     {% if messages %}
-    <div class="alert alert-danger my-3" role="alert">
-        {% for message in messages %}
-        <strong>{{ message.tags }}</strong>
-        <ul>
-            <li>{{ message.message }}</li>
-        </ul>
-        {% endfor %}
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Messages</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% for message in messages %}
+                    <div class="alert alert-warning" role="alert">
+                        <strong>{{ message.tags }}</strong>
+                        <ul>
+                            <li>{{ message.message }}</li>
+                        </ul>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
     {% endif %}
+
+
+
 
     <h2 class="border-bottom py-2">{{ question.subject }}</h2>
 
@@ -214,11 +228,15 @@ $(document).ready(function(){
         location.href = $(this).data('uri');
 <!--        if(confirm("정말로 추천하시겠습니까?")) {-->
 <!--            location.href = $(this).data('uri');-->
-<!--        }-->
+<!--        }--
     });
+
+    $('#alertModal').modal('show');
 });
 
+$(document).load(function(){
 
+});
 
 
 

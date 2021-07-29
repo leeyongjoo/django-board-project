@@ -19,7 +19,7 @@
                 </select></div>
 
                 <div class="p-2 bd-highlight">
-                    <a href="{% url 'board:question_create' %}" class="btn btn-info"><i class="bi bi-plus"></i> 추가</a>
+                    <a href="{% url 'board:question_create' %}" class="btn btn-info rounded-pill"><i class="bi bi-plus"></i> 추가</a>
                 </div>
             </div>
 
@@ -91,7 +91,7 @@
                 {% endif %}
                 <!-- 페이지리스트 -->
                 {% for page_number in question_list.paginator.page_range %}
-<!--                    {% if page_number >= question_list.number|add:-2 and page_number <= question_list.number|add:2 %}-->
+                    {% if question_list.number|add:-4 <= page_number and page_number <= question_list.number|add:4 %}
                         {% if page_number == question_list.number %}
                         <li class="page-item active" aria-current="page">
                             <a class="page-link" data-page="{{ page_number }}">{{ page_number }}</a>
@@ -101,7 +101,7 @@
                             <a class="page-link" data-page="{{ page_number }}">{{ page_number }}</a>
                         </li>
                         {% endif %}
-<!--                    {% endif %}-->
+                    {% endif %}
                 {% endfor %}
                 <!-- 다음페이지 -->
                 {% if question_list.has_next %}
