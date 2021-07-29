@@ -14,6 +14,7 @@
             <div class="me-auto p-2 bd-highlight"><select class="form-control so">
                 {{ so }}
                 <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
+                <option value="view" {% if so == 'view' %}selected{% endif %}>조회순</option>
                 <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>추천순</option>
                 <option value="popular" {% if so == 'popular' %}selected{% endif %}>답변순</option>
             </select></div>
@@ -28,10 +29,11 @@
             <thead>
             <tr class="text-center align-bottom">
                 <th scope="col" class="col">#</th>
-                <th scope="col" class="col">Like!</th>
+<!--                <th scope="col" class="col">Like!</th>-->
                 <th scope="col" class="col-5">Title</th>
                 <th scope="col" class="col">Author</th>
-                <th scope="col" class="col-md-auto">Create Date</th>
+                <th scope="col" class="col">Create Date</th>
+                <th scope="col" class="col">Views</th>
             </tr>
             </thead>
             <tbody>
@@ -43,20 +45,24 @@
                 </td>
                 {% comment %} 오름차순 정렬
                 <td>{{ question_list.start_index|add:forloop.counter|sub:1 }}</td>
-                {% endcomment %}
                 <td>
                     {% if question.voter.all.count > 0 %}
                     <span class="badge bg-primary px-2 py-1">{{ question.voter.all.count }}</span>
                     {% endif %}
                 </td>
+                {% endcomment %}
                 <td class="text-start">
+                    {% if question.voter.all.count > 0 %}
+                    <span class="badge bg-primary px-2 py-1">{{ question.voter.all.count }}</span>
+                    {% endif %}
                     <span class="text-primary">{{ question.subject }}</span>
                     {% if question.answer_set.count > 0 %}
-                    <span class="text-danger small ml-2">{{ question.answer_set.count }}</span>
+                    <span class="text-danger small ml-2">[{{ question.answer_set.count }}]</span>
                     {% endif %}
                 </td>
                 <td>{{ question.author.username }}</td>
                 <td>{{ question.create_date|date:'Y-m-d' }}</td>
+                <td>{{ question.hit }}</td>
             </tr>
             {% endfor %}
             {% else %}

@@ -36,6 +36,8 @@ def index(request):
         question_list = question_list.annotate(num_voter=Count('voter')).order_by('-num_voter', '-create_date')
     elif so == 'popular':
         question_list = question_list.annotate(num_answer=Count('answer')).order_by('-num_answer', '-create_date')
+    elif so == 'view':
+        question_list = question_list.annotate(num_answer=Count('answer')).order_by('-hit', '-create_date')
     else:
         question_list = question_list.order_by('-create_date')
 
