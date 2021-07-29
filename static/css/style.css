@@ -9,3 +9,7 @@
     top: -15px;
     visibility: hidden;
 }
+
+.tr-list {
+    cursor: pointer;
+}
