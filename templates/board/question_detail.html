@@ -5,10 +5,8 @@
 {% block content %}
 
 <article class="blog-post">
-
     <div class="d-grid gap-2">
-
-        <div class="card g-5">
+        <div class="card g-5 rounded shadow-sm">
             <div class="card-body">
                 <h2 class="blog-post-title">{{ question.subject }}</h2>
                 <h6 class="card-subtitle mb-2 text-muted">{{ question.create_date|date:'Y-m-d H:i' }} by
@@ -19,7 +17,8 @@
                 <div class="d-flex justify-content-between">
                     <div>
                         <a href="#" data-uri="{% url 'board:vote_question' question.id  %}" class="recommend">
-                            <button type="button" class="btn btn-{% if user.is_authenticated %}{% if user in question.voter.all %}primary{% endif %}{% endif %}">
+                            <button type="button"
+                                    class="btn btn-{% if user.is_authenticated %}{% if user in question.voter.all %}primary{% endif %}{% endif %}">
                                 <i class="bi bi-hand-thumbs-up-fill"></i>
                                 <span class="badge bg-light" style="color:black;">{{question.voter.count}}</span>
                             </button>
@@ -27,191 +26,147 @@
                     </div>
                     <div>
                     <span class="align-middle">
-                    <i class="bi bi-eye-fill"></i> 0
+                    <i class="bi bi-eye-fill"></i> 0 <!-- TODO: 조회수 기능 추가 -->
                         </span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card gap-1">
+        <div class="card gap-1 rounded shadow-sm">
             <div class="card-body">
                 {{ question.content|escape|mark }}
             </div>
+
+            {% if request.user == question.author%}
+            <div class="my-3 mx-auto">
+                <a href="{% url 'board:question_modify' question.id  %}"
+                   class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" class="delete btn btn-sm btn-outline-danger"
+                   data-uri="{% url 'board:question_delete' question.id  %}">삭제</a>
+            </div>
+            {% endif %}
         </div>
     </div>
-
-
-    <hr>
-
-
-
 </article>
 
-
+<!-- 사용자오류 표시 -->
 <div class="container my-3">
-    <!-- 사용자오류 표시 -->
     {% if messages %}
-    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModal" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Messages</h5>
+            <div class="modal-content" role="alert">
+
+                {% for message in messages %}
+                <div class="modal-header alert-warning">
+                    <h5 class="modal-title" id="alertModalTitle">Messages</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    {% for message in messages %}
-                    <div class="alert alert-warning" role="alert">
-                        <strong>{{ message.tags }}</strong>
-                        <ul>
-                            <li>{{ message.message }}</li>
-                        </ul>
-                    </div>
+                <div class="modal-body alert-warning">
 
-                    {% endfor %}
+                    <h4 class="alert-heading">{{ message.tags|title }}!</h4>
+                    <p>{{ message.message }}</p>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 답변 부분 시작 -->
+
+<div class="card my-3 p-3 bg-body rounded shadow-sm">
+    <h6 class="border-bottom pb-2 mb-0 text-end">{{question.answer_set.count}} 개의 답변이 있습니다.</h6>
+
+    <!-- 각 답변 -->
+    {% for answer in question.answer_set.all %}
+    <a name="answer_{{ answer.id }}" class="anchor"></a>
+
+    <div class="d-flex text-muted pt-3 row">
+        <svg xmlns="http://www.w3.org/2000/svg" role="img" width="32" height="32" fill=""
+             class="bi bi-person-square bd-placeholder-img flex-shrink-0 me-2 rounded col-auto" viewBox="0 0 16 16"
+             aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+            Placeholder</title>
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z"/>
+        </svg>
+        <div class="pb-3 mb-0 small border-bottom col w-auto">
+            <div class="row justify-content-between">
+                <strong class="d-block text-gray-dark col-4">{{ answer.author.username }}</strong>
+                <div class="col-4 ps-1 text-end">
+                    {% if request.user == answer.author %}
+                    <a href="{% url 'board:answer_modify' answer.id %}" class="link-secondary">수정</a>
+                    <a href="#" class="delete link-danger" data-uri="{% url 'board:answer_delete' answer.id %}">삭제</a>
+                    {% endif %}
                 </div>
             </div>
+
+            <div class="pt-2">{{ answer.content }}</div>
+            <div class="text-gray">
+                (작성: {{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정: {{
+                answer.modify_date|date:'Y-m-d H:i' }}{% endif %})
+            </div>
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    <small class="d-block text-end mt-3">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">답변 추가</a>
+    </small>
+</div>
+<!-- 답변 부분 끝 -->
+
+
+<!-- 답변 추천 {{answer.voter.count}} -->
+
+<!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>-->
+
+{% if answer_form.errors %}
+<div class="alert alert-danger" role="alert">
+    {% for field in answer_form %}
+    {% if field.errors %}
+    <strong>{{ field.label }}</strong>
+    {{ field.errors }}
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">답변 추가</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="{% url 'board:answer_create' question.id %}" method="post" class="my-3">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="content" class="col-form-label">답변 내용:</label>
+                        <textarea class="form-control" name="content"
+                                  {% if not user.is_authenticated %}disabled{% endif %}
+                                  id="content"
+                                  rows="5">{{ answer_form.content.value|default_if_none:'' }}</textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
 
-    {% endif %}
 
-
-
-
-    <h2 class="border-bottom py-2">{{ question.subject }}</h2>
-
-    <div class="row my-3">
-        <div class="col-1"> <!-- 추천영역 -->
-            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{question.voter.count}}</div>
-            <a href="#" data-uri="{% url 'board:vote_question' question.id  %}"
-               class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
-        </div>
-        <div class="col-11"> <!-- 질문영역 -->
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-text">{{ question.content|escape|mark }}</div>
-                    <div class="d-flex align-items-end flex-column">
-                        <div class="badge bg-secondary p-2 text-start">
-                            <div class="mb-2">{{ question.author.username }}</div>
-                            <div>{{ question.create_date|date:'Y년 m월 d일 H:i' }}</div>
-                        </div>
-
-                        {% if question.modify_date %}
-                        <div class="badge bg-secondary p-2 text-start my-1">
-                            <div class="mb-2">modified at</div>
-                            <div>{{ question.modify_date|date:'Y년 m월 d일 H:i' }}</div>
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% if request.user == question.author%}
-                    <div class="my-3">
-                        <a href="{% url 'board:question_modify' question.id  %}"
-                           class="btn btn-sm btn-outline-secondary">수정</a>
-                        <a href="#" class="delete btn btn-sm btn-outline-secondary"
-                           data-uri="{% url 'board:question_delete' question.id  %}">삭제</a>
-                    </div>
-                    {% endif %}
-
-                    <!-- 질문 댓글 Start -->
-                    {% if question.comment_set.count > 0 %}
-                    <div class="mt-3">
-                        {% for comment in question.comment_set.all %}
-                        <div class="comment py-2 text-muted">
-                            <span style="white-space: pre-line;">{{ comment.content }}</span>
-                            <span>
-                                - {{ comment.author }}, {{ comment.create_date }}
-                                {% if comment.modify_date != comment.create_date %}
-                                ({{ comment.modify_date }} 수정됨.)
-                                {% endif %}
-                            </span>
-                            {% if request.user == comment.author %}
-                            <a href="{% url 'board:comment_modify_question' comment.id  %}" class="small">수정</a>,
-                            <a href="#" class="small delete"
-                               data-uri="{% url 'board:comment_delete_question' comment.id  %}">삭제</a>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                    <div>
-                        <a href="{% url 'board:comment_create_question' question.id  %}"
-                           class="small"><small>댓글 추가 ..</small></a>
-                    </div>
-                    <!-- 질문 댓글 End -->
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
-    {% for answer in question.answer_set.all %}
-
-    <a name="answer_{{ answer.id }}" class="anchor"></a>
-
-    <div class="row my-3">
-        <div class="col-1">  <!-- 추천영역 -->
-            <div class="bg-light text-center p-3 border font-weight-bolder mb-1">{{answer.voter.count}}</div>
-            <a href="#" data-uri="{% url 'board:vote_answer' answer.id  %}"
-               class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
-        </div>
-        <div class="col-11">  <!-- 답변영역 -->
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-text">{{ answer.content|escape|mark }}</div>
-                    <div class="d-flex justify-content-end">
-
-                        <div class="badge bg-secondary p-2 text-start mx-1">
-                            <div class="mb-2">{{ answer.author.username }}</div>
-                            <div>{{ answer.create_date|date:'Y년 m월 d일 H:i' }}</div>
-
-                        </div>
-
-                        {% if answer.modify_date %}
-                        <div class="badge bg-secondary p-2 text-start">
-                            <div class="mb-2">modified at</div>
-                            <div>{{ answer.modify_date|date:'Y년 m월 d일 H:i' }}</div>
-                        </div>
-                        {% endif %}
-
-                    </div>
-
-                    {% if request.user == answer.author %}
-                    <div class="my-3">
-                        <a href="{% url 'board:answer_modify' answer.id %}"
-                           class="btn btn-sm btn-outline-secondary">수정</a>
-                        <a href="#" class="delete btn btn-sm btn-outline-secondary "
-                           data-uri="{% url 'board:answer_delete' answer.id %}">삭제</a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-    <form action="{% url 'board:answer_create' question.id %}" method="post" class="my-3">
-        {% csrf_token %}
-        {% if answer_form.errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for field in answer_form %}
-            {% if field.errors %}
-            <strong>{{ field.label }}</strong>
-            {{ field.errors }}
-            {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
-        <div class="form-group">
-            <label for="content">답변 내용</label>
-            <textarea class="form-control" name="content"
-                      {% if not user.is_authenticated %}disabled{% endif %}
-                      id="content" rows="5">{{ answer_form.content.value|default_if_none:'' }}</textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">답변 등록</button>
-    </form>
 </div>
 {% endblock %}
 
@@ -237,6 +192,8 @@ $(document).ready(function(){
 $(document).load(function(){
 
 });
+
+
 
 
 
