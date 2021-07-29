@@ -98,15 +98,15 @@
                 <div class="col-4 ps-1 text-end">
                     {% if request.user == answer.author %}
                     <a href="{% url 'board:answer_modify' answer.id %}" class="link-secondary">수정</a>
-                    <a href="#" class="delete link-danger" data-uri="{% url 'board:answer_delete' answer.id %}">삭제</a>
+                    <a href="#answer_{{ answer.id }}" class="delete link-danger" data-uri="{% url 'board:answer_delete' answer.id %}">삭제</a>
                     {% endif %}
                 </div>
             </div>
 
             <div class="pt-2">{{ answer.content }}</div>
             <div class="text-gray">
-                (작성: {{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정: {{
-                answer.modify_date|date:'Y-m-d H:i' }}{% endif %})
+                (작성: {{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정:
+                {{ answer.modify_date|date:'Y-m-d H:i' }}{% endif %})
             </div>
         </div>
 
@@ -120,10 +120,6 @@
 </div>
 <!-- 답변 부분 끝 -->
 
-
-<!-- 답변 추천 {{answer.voter.count}} -->
-
-<!--<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>-->
 
 {% if answer_form.errors %}
 <div class="alert alert-danger" role="alert">
