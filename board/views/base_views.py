@@ -58,6 +58,9 @@ def detail(request, question_id):
     """
     question = get_object_or_404(Question, pk=question_id)
     if request.method == "GET":
+        question.hit += 1
+        question.save()
+
         answer_form = AnswerForm()
         context = {'question': question, 'answer_form': answer_form}
         return render(request, 'board/question_detail.html', context)
