@@ -4,6 +4,7 @@ Django로 게시판 구현하고 이것저것 연습해 보는 repo
 
 🔗 http://leeyongjoo.site
 
+
 ## Stack
 
 - Bootstrap 5
@@ -40,6 +41,7 @@ Django로 게시판 구현하고 이것저것 연습해 보는 repo
 ### To-Do
 
 - [ ] 조회수 중복으로 오르지 않게 수정
+- [ ] HTTPS 적용
 - [ ] ...
 
 ### Learned
