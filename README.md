@@ -6,7 +6,7 @@ Django로 게시판 구현하고 이것저것 연습해 보는 repo
 
 ## Stack
 
-- Bootstrap(5.0)
+- Bootstrap 5
 - Django
 - Nginx, Gunicorn
 - AWS Lightsail
@@ -32,6 +32,16 @@ Django로 게시판 구현하고 이것저것 연습해 보는 repo
 > - 질문 조회수
 > - 답변 조회, 수정, 삭제
 
-## Learned
+## Description
+
+- 질문 또는 답변 작성 시 로그인 필요
+- 본인이 작성한 질문을 추천하면 오류 발생
+
+### To-Do
+
+- [ ] 조회수 중복으로 오르지 않게 수정
+- [ ] ...
+
+### Learned
 
 ...
