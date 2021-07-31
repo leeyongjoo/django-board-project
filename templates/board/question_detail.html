@@ -14,9 +14,31 @@
                     {% if question.modify_date %}(수정: {{ question.modify_date|date:'Y-m-d H:i' }}){% endif %}</h6>
                 <p class="card-text"></p>
 
+                <!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal" id="mm" tabindex="1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mmLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
                 <div class="d-flex justify-content-between">
                     <div>
-                        <a href="#" data-uri="{% url 'board:vote_question' question.id  %}" class="recommend">
+                        <a href="{% url 'board:vote_question' question.id %}" data-uri="" id="recommend">
                             <button type="button"
                                     class="btn btn-{% if user.is_authenticated %}{% if user in question.voter.all %}primary{% endif %}{% endif %}">
                                 <i class="bi bi-hand-thumbs-up-fill"></i>
@@ -42,7 +64,7 @@
             <div class="my-3 mx-auto">
                 <a href="{% url 'board:question_modify' question.id  %}"
                    class="btn btn-sm btn-outline-secondary">수정</a>
-                <a href="#" class="delete btn btn-sm btn-outline-danger"
+                <a href="javascript:;" class="delete btn btn-sm btn-outline-danger" onclick="deletePost(this);"
                    data-uri="{% url 'board:question_delete' question.id  %}">삭제</a>
             </div>
             {% endif %}
@@ -52,11 +74,10 @@
 
 <!-- 사용자오류 표시 -->
 <div class="container my-3">
-    {% if messages %}
-    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModal" aria-hidden="true">
+
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="alertModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" role="alert">
-
                 {% for message in messages %}
                 <div class="modal-header alert-warning">
                     <h5 class="modal-title" id="alertModalTitle">Messages</h5>
@@ -72,7 +93,7 @@
             </div>
         </div>
     </div>
-    {% endif %}
+
 </div>
 
 <!-- 답변 부분 시작 -->
@@ -168,22 +189,19 @@
 
 {% block script %}
 <script type='text/javascript'>
-$(document).ready(function(){
-    $(".delete").on('click', function() {
-        if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = $(this).data('uri');
-        }
-    });
+function deletePost(obj) {
+    if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = obj.dataset.uri;
+    }
+}
 
-    $(".recommend").on('click', function() {
-        location.href = $(this).data('uri');
-<!--        if(confirm("정말로 추천하시겠습니까?")) {-->
-<!--            location.href = $(this).data('uri');-->
-<!--        }--
-    });
+{% if messages %}
+var myModal = new bootstrap.Modal(document.getElementById("myModal"), {});
 
-    $('#alertModal').modal('show');
-});
+document.onreadystatechange = function () {
+  myModal.show();
+};
+{% endif %}
 
 </script>
 {% endblock %}

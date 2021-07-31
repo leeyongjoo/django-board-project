@@ -11,13 +11,14 @@
         <h2 class="text-center">Question <b>List</b></h2>
 
         <div class="d-flex bd-highlight mb-3">
-            <div class="me-auto p-2 bd-highlight"><select class="form-control so">
-                {{ so }}
-                <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
-                <option value="view" {% if so == 'view' %}selected{% endif %}>조회순</option>
-                <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>추천순</option>
-                <option value="popular" {% if so == 'popular' %}selected{% endif %}>답변순</option>
-            </select></div>
+            <div class="me-auto p-2 bd-highlight">
+                <select class="form-control so" onchange="changeSelect(this);">
+                    {% comment %} {{ so }} {% endcomment %}
+                    <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
+                    <option value="view" {% if so == 'view' %}selected{% endif %}>조회순</option>
+                    <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>추천순</option>
+                    <option value="popular" {% if so == 'popular' %}selected{% endif %}>답변순</option>
+                </select></div>
 
             <div class="p-2 bd-highlight">
                 <a href="{% url 'board:question_create' %}" class="btn btn-info rounded-pill"><i class="bi bi-plus"></i>
@@ -87,10 +88,10 @@
                 <!-- 이전페이지 -->
                 {% if question_list.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" type="button" data-page="1">&laquo;</a>
+                    <a class="page-link" type="button" href="javascript:;" onclick="clickPage(1);">&laquo;</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" type="button" data-page="{{ question_list.previous_page_number }}">&lsaquo;</a>
+                    <a class="page-link" type="button" href="javascript:;" onclick="clickPage({{ question_list.previous_page_number }})">&lsaquo;</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -102,11 +103,11 @@
                 {% if question_list.number|add:-4 <= page_number and page_number <= question_list.number|add:4 %}
                 {% if page_number == question_list.number %}
                 <li class="page-item active" aria-current="page">
-                    <a class="page-link" type="button" data-page="{{ page_number }}">{{ page_number }}</a>
+                    <a class="page-link" type="button">{{ page_number }}</a>
                 </li>
                 {% else %}
                 <li class="page-item">
-                    <a class="page-link" type="button" data-page="{{ page_number }}">{{ page_number }}</a>
+                    <a class="page-link" type="button" href="javascript:;" onclick="clickPage({{ page_number }})">{{ page_number }}</a>
                 </li>
                 {% endif %}
                 {% endif %}
@@ -114,10 +115,10 @@
                 <!-- 다음페이지 -->
                 {% if question_list.has_next %}
                 <li class="page-item">
-                    <a class="page-link" type="button" data-page="{{ question_list.next_page_number }}">&rsaquo;</a>
+                    <a class="page-link" type="button" href="javascript:;" onclick="clickPage({{ question_list.next_page_number }})">&rsaquo;</a>
                 </li>
                 <li class="page-item">
-                    <a class="page-link" type="button" data-page="{{ last_page }}">&raquo;</a>
+                    <a class="page-link" type="button" href="javascript:;" onclick="clickPage({{ last_page }})">&raquo;</a>
                 </li>
                 {% else %}
                 <li class="page-item disabled">
@@ -141,31 +142,29 @@
 
 {% block script %}
 <script type='text/javascript'>
-$(document).ready(function(){
+// Pagination
+function clickPage(num) {
+    document.getElementById("page").value = num
+    document.getElementById("searchForm").submit()
+}
 
-    // Pagination
-    $(".page-link").on('click', function() {
-        $("#page").val($(this).data("page"));
-        $("#searchForm").submit();
-    });
+// Sorting
+function changeSelect(obj) {
+    document.getElementById("so").value = obj.value
+    document.getElementById("page").value = 1
+    document.getElementById("searchForm").submit()
+}
 
-    // Search
-    $("#inputSearch").keypress(function (e) {
-        if (e.which == 13){
-            $("#kw").val($(".kw").val());
-            $("#page").val(1);  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
-            $("#searchForm").submit();
-        }
-    });
-
-    // Sorting
-    $(".so").on('change', function() {
-        $("#so").val($(this).val());
-        $("#page").val(1);
-        $("#searchForm").submit();
-    });
-});
-
+// Searc
+document.getElementById('inputSearch').onkeypress = function(e){
+    if (!e) e = window.event;
+    var keyCode = e.code || e.key;
+    if (keyCode == 'Enter'){
+        document.getElementById("kw").value = document.getElementById("inputSearch").value
+        document.getElementById("page").value = 1
+        document.getElementById("searchForm").submit()
+    }
+}
 
 </script>
 {% endblock %}
