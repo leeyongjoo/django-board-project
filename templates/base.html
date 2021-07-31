@@ -19,7 +19,7 @@
             <span class="text-secondary fs-3 p-0"></span>
         </a>
 
-        <div class="d-md-flex justify-content-md-end">
+        <div class="d-md-flex justify-content-md-end user-select-none">
             {% if user.is_authenticated %}
             <div>
                 <span class="align-middle">👋 {{ user.username }}</span>
@@ -38,7 +38,7 @@
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 
 
-    <footer class="pt-5 my-5 text-muted border-top text-center">
+    <footer class="pt-5 my-5 text-muted border-top text-center user-select-none">
         leeyongjoo &copy; 2021
     </footer>
     </div>
