@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container my-3">
-    <div class="row my-3">
-        <div class="col-4">
-            <h4>계정생성</h4>
-        </div>
-    </div>
-    <form method="post" class="post-form row g-3 p-4">
+<div class="container my-3 user-select-none">
+
+    <h4 class="text-center mb-5">계정생성</h4>
+
+    <form method="post" class="post-form row g-3 p-4 text-center">
         {% csrf_token %}
 
         {% comment %}{% include "form_errors.html" %}{% endcomment %}

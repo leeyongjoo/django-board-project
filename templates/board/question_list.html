@@ -6,9 +6,9 @@
 
 
 <main>
-    <div class="container-sm p-2">
+    <div class="container-sm p-2 user-select-none">
 
-        <h2 class="text-center">Question <b>List</b></h2>
+<!--        <h2 class="text-center">Question <b>List</b></h2>-->
 
         <div class="d-flex bd-highlight mb-3">
             <div class="me-auto p-2 bd-highlight">
@@ -28,7 +28,7 @@
 
         <table class="table table-hover">
             <thead>
-            <tr class="text-center align-bottom">
+            <tr class="text-center align-bottom user-select-none">
                 <th scope="col" class="col">#</th>
 <!--                <th scope="col" class="col">Like!</th>-->
                 <th scope="col" class="col-5">Title</th>
@@ -84,7 +84,7 @@
 
         <!-- 페이징처리 시작 -->
         <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center user-select-none">
                 <!-- 이전페이지 -->
                 {% if question_list.has_previous %}
                 <li class="page-item">
