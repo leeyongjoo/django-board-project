@@ -4,12 +4,10 @@
 
     <h4 class="text-center mb-5">계정생성</h4>
 
-    <form method="post" class="post-form row g-3 p-4 text-center">
+    <form method="post" class="post-form row g-3 p-4 text-center justify-content-center">
         {% csrf_token %}
 
         {% comment %}{% include "form_errors.html" %}{% endcomment %}
-
-        {{ form.username.is_valid }}
 
         <div class="row mb-3">
             <div class="col">
@@ -19,10 +17,12 @@
                        placeholder="Username" aria-label="Username" name="username"
                        id="username" value="{{ form.username.value|default_if_none:'' }}">
                 <div class="invalid-feedback">
-                    {{ form.errors.username }}
+                    {% for error in form.errors.username %}
+                        {{ error }}<br>
+                    {% endfor %}
                 </div>
                 <div class="valid-feedback">
-                    Looks good!
+                    좋아요!
                 </div>
 
             </div>
@@ -33,10 +33,12 @@
                        placeholder="Email" aria-label="Email" name="email"
                        id="email" value="{{ form.email.value|default_if_none:'' }}">
                 <div class="invalid-feedback">
-                    {{ form.errors.email }}
+                    {% for error in form.errors.email %}
+                        {{ error }}<br>
+                    {% endfor %}
                 </div>
                 <div class="valid-feedback">
-                    Looks good!
+                    좋아요!
                 </div>
             </div>
 
@@ -46,15 +48,17 @@
             <div class="col">
                 <label for="password1">비밀번호</label>
                 <input type="password" class="form-control
-                    {% if form.errors.password1 %}is-invalid{% elif form.is_bound %}is-valid{% endif %}"
+                    {% if form.errors.password1 or form.errors.password2 %}is-invalid{% elif form.is_bound %}is-valid{% endif %}"
                        placeholder="Password1" aria-label="Password1"
                        name="password1"
                        id="password1" value="{{ form.password1.value|default_if_none:'' }}">
                 <div class="invalid-feedback">
-                    {{ form.errors.password1 }}
+                    {% for error in form.errors.password1 %}
+                        {{ error }}<br>
+                    {% endfor %}
                 </div>
                 <div class="valid-feedback">
-                    Looks good!
+                    좋아요!
                 </div>
             </div>
             <div class="col">
@@ -63,12 +67,14 @@
                     {% if form.errors.password2 %}is-invalid{% elif form.is_bound %}is-valid{% endif %}"
                        placeholder="Password2" aria-label="Password2"
                        name="password2"
-                       id="password2" value="{{ form.password2.value|default_if_none:'' }}">
+                       id="password2" value="{{ '' }}">
                 <div class="invalid-feedback">
-                    {{ form.errors.password2 }}
+                    {% for error in form.errors.password2 %}
+                        {{ error }}<br>
+                    {% endfor %}
                 </div>
                 <div class="valid-feedback">
-                    Looks good!
+                    좋아요!
                 </div>
             </div>
         </div>

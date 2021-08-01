@@ -53,7 +53,7 @@
 <!-- 사용자오류 표시 -->
 <div class="container my-3">
 
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="alertModal" aria-hidden="true">
+    <div class="modal fade" id="recommendErrorModal" tabindex="-1" aria-labelledby="alertModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" role="alert">
                 {% for message in messages %}
@@ -115,7 +115,7 @@
     {% endfor %}
 
     <small class="d-block text-end mt-3 user-select-none">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">답변 추가</a>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#answerAdd">답변 추가</a>
     </small>
 </div>
 <!-- 답변 부분 끝 -->
@@ -132,11 +132,11 @@
 </div>
 {% endif %}
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="answerAdd" tabindex="-1" aria-labelledby="answerAddLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">답변 추가</h5>
+                <h5 class="modal-title" id="answerAddLabel">답변 추가</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -175,7 +175,7 @@ function deletePost(obj) {
 }
 
 {% if messages %}
-var myModal = new bootstrap.Modal(document.getElementById("myModal"), {});
+var myModal = new bootstrap.Modal(document.getElementById("recommendErrorModal"), {});
 
 document.onreadystatechange = function () {
   myModal.show();

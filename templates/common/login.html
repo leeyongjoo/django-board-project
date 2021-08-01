@@ -6,38 +6,39 @@
     </symbol>
 </svg>
 
-<body class="text-center row user-select-none">
-{% if form.errors %}
+<body class="d-flex justify-content-center text-center row user-select-none">
 
-        <div class="d-flex justify-content-center w-200">
-            <div class="alert alert-danger d-flex align-items-center" role="alert">
+<div class="text-center mx-auto">
+
+    {% if form.errors %}
+
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-danger d-flex justify-content-center row gx-5" role="alert">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
                     <use xlink:href="#exclamation-triangle-fill"/>
                 </svg>
                 {% for field in form %}
-                    {% if field.errors %}
-                <div class="d-flex flex-column">
+                {% if field.errors %}
+                <div class="d-flex flex-column col">
                     <div>
-                    <h4>{{ field.name|title }}</h4>
-                        </div>
+                        <h4>{{ field.name|title }}</h4>
+                    </div>
                     <div>
-                    {{ field.errors.as_ul }}
+                        {% for error in field.errors %}
+                        {{ error }}<br>
+                        {% endfor %}
                     </div>
                 </div>
-                    {% endif %}
+                {% endif %}
                 {% endfor %}
 
                 {% for error in form.non_field_errors %}
-                    {{ form.non_field_errors.as_ul }}
+                {{ error }}
                 {% endfor %}
             </div>
         </div>
 
 {% endif %}
-
-
-<div class="text-center mx-auto">
-
 
     <main class="form-signin">
         <form method="post" class="post-form" action="{% url 'common:login' %}">
