@@ -12,7 +12,7 @@
 
         <div class="d-flex bd-highlight mb-3">
             <div class="me-auto p-2 bd-highlight">
-                <select class="form-control so" onchange="changeSelect(this);">
+                <select class="form-select so" onchange="changeSelect(this);">
                     {% comment %} {{ so }} {% endcomment %}
                     <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
                     <option value="view" {% if so == 'view' %}selected{% endif %}>조회순</option>
