@@ -2,50 +2,22 @@
 <!doctype html>
 <html lang="ko">
 
-{% include "head.html" %}
+{% include "base_head.html" %}
 
 <body>
-
 <div class="col-lg-8 mx-auto p-3 py-md-5">
-    <header class="d-flex justify-content-between align-items-center pb-3 mb-5 border-bottom">
-        <a href="/" class="d-flex align-items-center dark text-secondary text-decoration-none">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-house-fill"
-                 viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-                <path fill-rule="evenodd"
-                      d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
-            </svg>
-            <span class="text-secondary fs-3 p-0"></span>
-        </a>
-
-        <div class="d-md-flex justify-content-md-end user-select-none">
-            {% if user.is_authenticated %}
-            <div>
-                <span class="align-middle">👋 {{ user.username }}</span>
-                <a class="btn btn-light" href="{% url 'common:logout' %}"> Logout</a>
-            </div>
-            {% else %}
-            <a href="{% url 'common:login' %}" class="btn btn-link me-md-2" type="button">Sign In</a>
-            <a href="{% url 'common:signup' %}" class="btn btn-dark" type="button">Sign Up</a>
-            {% endif %}
-        </div>
-    </header>
+    {% include "base_header.html" %}
 
     <!-- 기본 템플릿 안에 삽입될 내용 Start -->
-{% block content %}
-{% endblock %}
-<!-- 기본 템플릿 안에 삽입될 내용 End -->
+    {% block content %}
+    {% endblock %}
+    <!-- 기본 템플릿 안에 삽입될 내용 End -->
 
+</div>
 
-    <footer class="pt-5 my-5 text-muted border-top text-center user-select-none">
-        leeyongjoo &copy; 2021
-    </footer>
-    </div>
+{% include "base_footer.html" %}
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+{% include "base_script.html" %}
 
 <!-- 자바스크립트 Start -->
 {% block script %}
