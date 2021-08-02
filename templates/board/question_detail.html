@@ -114,16 +114,16 @@
                 </div>
             </div>
 
-            <div class="pt-2">{{ answer.content }}</div>
+            <div class="fs-5">{{ answer.content }}</div>
             <div class="row user-select-none">
                 <div class="text-gray">
-                    (작성: {{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정:
+                    ({{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정:
                     {{ answer.modify_date|date:'Y-m-d H:i' }}{% endif %})
                 </div>
 
                 {% for comment in answer.comment_set.all %}
                 <div>
-                    <div class="badge bg-light text-wrap text-start" style="line-height: normal;">
+                    <div class="badge bg-light text-wrap text-start lh-base" style="font-size: 0.8rem;">
                       {{ comment.content }} ( {{ comment.author }} | {{ comment.modify_date|date:"Y-m-d H:i" }} )
                         <a href="{% url 'board:comment_delete_answer' comment.id %}" style="color:grey;" onclick="javascript:deleteComment(this);">
                             <i class="bi bi-x-square-fill"></i></a>
