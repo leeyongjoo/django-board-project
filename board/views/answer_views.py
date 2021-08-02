@@ -24,7 +24,7 @@ def answer_create(request, question_id):
                 resolve_url('board:detail', question_id=question.id), answer.id))
     else:
         answer_form = AnswerForm()
-    context = {'question': question, 'answer_form': answer_form}
+    context = {'question': question, 'form': answer_form}
     return render(request, 'board/question_detail.html', context)
 
 

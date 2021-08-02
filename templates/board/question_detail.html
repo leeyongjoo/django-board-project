@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<article class="blog-post">
+<article class="blog-post" xmlns:line-height="http://www.w3.org/1999/xhtml">
     <div class="d-grid gap-2">
         <div class="card g-5 rounded shadow-sm">
             <div class="card-body">
@@ -76,6 +76,17 @@
 
 <!-- 답변 부분 시작 -->
 
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+    {% for field in form %}
+    {% if field.errors %}
+    <strong>{{ field.label }}</strong>
+    {{ field.errors }}
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="card my-3 p-3 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0 text-end user-select-none">{{question.answer_set.count}} 개의 답변이 있습니다.</h6>
 
@@ -104,9 +115,28 @@
             </div>
 
             <div class="pt-2">{{ answer.content }}</div>
-            <div class="text-gray user-select-none">
-                (작성: {{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정:
-                {{ answer.modify_date|date:'Y-m-d H:i' }}{% endif %})
+            <div class="row user-select-none">
+                <div class="text-gray">
+                    (작성: {{ answer.create_date|date:'Y-m-d H:i' }}{% if answer.modify_date %} | 수정:
+                    {{ answer.modify_date|date:'Y-m-d H:i' }}{% endif %})
+                </div>
+
+                {% for comment in answer.comment_set.all %}
+                <div>
+                    <div class="badge bg-light text-wrap text-start" style="line-height: normal;">
+                      {{ comment.content }} ( {{ comment.author }} | {{ comment.modify_date|date:"Y-m-d H:i" }} )
+                        <a href="{% url 'board:comment_delete_answer' comment.id %}" style="color:grey;" onclick="javascript:deleteComment(this);">
+                            <i class="bi bi-x-square-fill"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+                <small class="d-block text-start mt-3 user-select-none">
+                    <form action="{% url 'board:comment_create_answer' answer.id %}" method="post">
+                        {% csrf_token %}
+                        <a href="javascript:;" onclick="addCommentInput(this);">댓글 추가</a>
+                    </form>
+                </small>
+
             </div>
         </div>
 
@@ -120,17 +150,6 @@
 </div>
 <!-- 답변 부분 끝 -->
 
-
-{% if answer_form.errors %}
-<div class="alert alert-danger" role="alert">
-    {% for field in answer_form %}
-    {% if field.errors %}
-    <strong>{{ field.label }}</strong>
-    {{ field.errors }}
-    {% endif %}
-    {% endfor %}
-</div>
-{% endif %}
 
 <div class="modal fade" id="answerAdd" tabindex="-1" aria-labelledby="answerAddLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -148,7 +167,7 @@
                         <textarea class="form-control" name="content"
                                   {% if not user.is_authenticated %}disabled{% endif %}
                                   id="content"
-                                  rows="5">{{ answer_form.content.value|default_if_none:'' }}</textarea>
+                                  rows="5">{{ form.content.value|default_if_none:'' }}</textarea>
                     </div>
 
                     <div class="modal-footer">
@@ -170,17 +189,41 @@
 <script type='text/javascript'>
 function deletePost(obj) {
     if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = obj.dataset.uri;
+            location.href = obj.dataset.uri
+    }
+}
+
+function deleteComment(obj) {
+    if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = obj.href
     }
 }
 
 {% if messages %}
-var myModal = new bootstrap.Modal(document.getElementById("recommendErrorModal"), {});
+var myModal = new bootstrap.Modal(document.getElementById("recommendErrorModal"), {})
 
 document.onreadystatechange = function () {
-  myModal.show();
-};
+  myModal.show()
+}
 {% endif %}
+
+function addCommentInput(obj) {
+
+    var newdiv = document.createElement('div')
+    newdiv.innerHTML = "<input id='inputComment' name='content' type='text' class='form-control' placeholder='댓글을 입력하세요.' onkeypress='javascript:enterComment(this);'>"
+    obj.parentElement.appendChild(newdiv)
+    obj.remove()
+    newdiv.children[0].focus()
+
+}
+
+function enterComment(e) {
+    if (!e) e = window.event;
+    var keyCode = e.code || e.key;
+    if (keyCode == 'Enter'){
+        e.parentElement.parentElement.submit()
+    }
+}
 
 
 </script>

@@ -18,3 +18,7 @@ body		{
     font-family: 'Gowun Dodum', 'NanumSquareRound', sans-serif !important;
 }
 .blog-post-title { font-family: font-family: 'Gowun Dodum', 'NanumSquareRound', sans-serif; }
+
+.bg-light {
+    color: grey;
+}
