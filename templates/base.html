@@ -4,19 +4,16 @@
 
 {% include "base_head.html" %}
 
-<body>
-<div class="col-lg-8 mx-auto p-3 py-md-5">
-    {% include "base_header.html" %}
+<body class="col-lg-8 mx-auto p-3 py-md-5">
 
-    <!-- 기본 템플릿 안에 삽입될 내용 Start -->
-    {% block content %}
-    {% endblock %}
-    <!-- 기본 템플릿 안에 삽입될 내용 End -->
+{% include "base_header.html" %}
 
-</div>
+<!-- 각 템플릿 안에 삽입될 내용 Start -->
+{% block content %}
+{% endblock %}
+<!-- 각 템플릿 안에 삽입될 내용 End -->
 
 {% include "base_footer.html" %}
-
 {% include "base_script.html" %}
 
 <!-- 자바스크립트 Start -->

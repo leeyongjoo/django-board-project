@@ -14,7 +14,7 @@
         {% if user.is_authenticated %}
         <div>
             <span class="align-middle">👋 {{ user.username }}</span>
-            <a class="btn btn-light" href="{% url 'common:logout' %}"> Logout</a>
+            <a class="btn btn-light" href="{% url 'common:logout' %}">Logout</a>
         </div>
         {% else %}
         <a href="{% url 'common:login' %}" class="btn btn-link me-md-2" type="button">Sign In</a>

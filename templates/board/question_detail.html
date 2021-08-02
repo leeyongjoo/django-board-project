@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<article class="blog-post" xmlns:line-height="http://www.w3.org/1999/xhtml">
+<article class="blog-post">
     <div class="d-grid gap-2">
         <div class="card g-5 rounded shadow-sm">
             <div class="card-body">
@@ -20,7 +20,7 @@
                             <button type="button"
                                     class="btn btn-{% if user.is_authenticated %}{% if user in question.voter.all %}primary{% endif %}{% endif %}">
                                 <i class="bi bi-hand-thumbs-up-fill"></i>
-                                <span class="badge bg-light" style="color:black;">{{question.voter.count}}</span>
+                                <span class="badge bg-light" style="color:black;">{{ question.voter.count }}</span>
                             </button>
                         </a>
                     </div>
@@ -38,11 +38,11 @@
                 {{ question.content|escape|mark }}
             </div>
 
-            {% if request.user == question.author%}
+            {% if request.user == question.author %}
             <div class="my-3 mx-auto user-select-none">
                 <a href="{% url 'board:question_modify' question.id  %}"
                    class="btn btn-sm btn-outline-secondary">수정</a>
-                <a href="javascript:;" class="delete btn btn-sm btn-outline-danger" onclick="deletePost(this);"
+                <a href="javascript:;" class="delete btn btn-sm btn-outline-danger" onclick="clickDeleteButton(this);"
                    data-uri="{% url 'board:question_delete' question.id  %}">삭제</a>
             </div>
             {% endif %}
@@ -90,13 +90,13 @@
 <div class="card my-3 p-3 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0 text-end user-select-none">{{question.answer_set.count}} 개의 답변이 있습니다.</h6>
 
-    <!-- 각 답변 -->
+    <!-- 답변 -->
     {% for answer in question.answer_set.all %}
     <a name="answer_{{ answer.id }}" class="anchor"></a>
 
     <div class="d-flex text-muted pt-3 row">
         <svg xmlns="http://www.w3.org/2000/svg" role="img" width="32" height="32" fill=""
-             class="bi bi-person-square bd-placeholder-img flex-shrink-0 me-2 rounded col-auto" viewBox="0 0 16 16"
+             class="bi bi-person-square bd-placeholder-img flex-shrink-0 rounded col-auto" viewBox="0 0 16 16"
              aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>
             Placeholder</title>
             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -108,8 +108,8 @@
                 <div class="col-4 ps-1 text-end user-select-none">
                     {% if request.user == answer.author %}
                     <a href="{% url 'board:answer_modify' answer.id %}" class="link-secondary">수정</a>
-                    <a href="#answer_{{ answer.id }}" class="delete link-danger"
-                       data-uri="{% url 'board:answer_delete' answer.id %}">삭제</a>
+                    <a href="javascript:" class="delete link-danger"
+                       data-uri="{% url 'board:answer_delete' answer.id %}" onclick="clickDeleteButton(this);">삭제</a>
                     {% endif %}
                 </div>
             </div>
@@ -124,9 +124,13 @@
                 {% for comment in answer.comment_set.all %}
                 <div>
                     <div class="badge bg-light text-wrap text-start lh-base" style="font-size: 0.8rem;">
-                      {{ comment.content }} ( {{ comment.author }} | {{ comment.modify_date|date:"Y-m-d H:i" }} )
-                        <a href="{% url 'board:comment_delete_answer' comment.id %}" style="color:grey;" onclick="javascript:deleteComment(this);">
+                        {{ comment.content }} ( {{ comment.author }} | {{ comment.modify_date|date:"Y-m-d H:i" }} )
+                        {% if request.user == comment.author %}
+                        <a href="javascript:" style="color:grey;"
+                           data-uri="{% url 'board:comment_delete_answer' comment.id %}"
+                           onclick="clickDeleteButton(this);">
                             <i class="bi bi-x-square-fill"></i></a>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
@@ -147,11 +151,8 @@
     <small class="d-block text-end mt-3 user-select-none">
         <a href="#" data-bs-toggle="modal" data-bs-target="#answerAdd">답변 추가</a>
     </small>
-</div>
-<!-- 답변 부분 끝 -->
 
-
-<div class="modal fade" id="answerAdd" tabindex="-1" aria-labelledby="answerAddLabel" aria-hidden="true">
+    <div class="modal fade" id="answerAdd" tabindex="-1" aria-labelledby="answerAddLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -171,7 +172,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
                         <button type="submit" class="btn btn-primary">저장</button>
                     </div>
                 </form>
@@ -180,32 +181,18 @@
         </div>
     </div>
 </div>
-
-
 </div>
+<!-- 답변 부분 끝 -->
+
 {% endblock %}
 
 {% block script %}
 <script type='text/javascript'>
-function deletePost(obj) {
+function clickDeleteButton(e) {
     if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = obj.dataset.uri
+            location.href = e.dataset.uri
     }
 }
-
-function deleteComment(obj) {
-    if(confirm("정말로 삭제하시겠습니까?")) {
-            location.href = obj.href
-    }
-}
-
-{% if messages %}
-var myModal = new bootstrap.Modal(document.getElementById("recommendErrorModal"), {})
-
-document.onreadystatechange = function () {
-  myModal.show()
-}
-{% endif %}
 
 function addCommentInput(obj) {
 
@@ -225,6 +212,12 @@ function enterComment(e) {
     }
 }
 
+{% if messages %}
+var myModal = new bootstrap.Modal(document.getElementById("recommendErrorModal"), {})
+document.onreadystatechange = function () {
+  myModal.show()
+}
+{% endif %}
 
 </script>
 {% endblock %}
