@@ -1,6 +1,9 @@
+from datetime import datetime
+
 from django.core.paginator import Paginator
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F
 from django.shortcuts import render, get_object_or_404
+
 
 from board.forms import AnswerForm
 from board.models import Question
@@ -8,6 +11,8 @@ from board.models import Question
 
 import logging
 logger = logging.getLogger('board')
+
+
 
 
 def index(request):
@@ -60,9 +65,47 @@ def detail(request, question_id):
     """
     question = get_object_or_404(Question, pk=question_id)
     if request.method == "GET":
-        question.hit += 1
-        question.save()
 
         answer_form = AnswerForm()
         context = {'question': question, 'answer_form': answer_form}
-        return render(request, 'board/question_detail.html', context)
+
+        q_id: str = str(question.id)
+
+        # 로그인 한 경우
+        if request.user.is_authenticated is True:
+            cookie_hits_key = f'hits_{request.user.id}'
+        # 비로그인 경우
+        else:
+            cookie_hits_key = 'hits_0'
+
+        # 쿠키로부터 방문기록 로드
+        cookie_hits_value: str = request.COOKIES.get(cookie_hits_key, None)
+
+        # 쿠키에 cookie_hits_key 항목이 있는 경우
+        if cookie_hits_value is not None:
+            q_id_list = cookie_hits_value.split('|')
+            # 방문한 경우는 그대로 응답
+            if q_id in q_id_list:
+                return render(request, 'board/question_detail.html', context)
+            # 방문하지 않은 경우
+            else:
+                new_hits_dict = (cookie_hits_key, cookie_hits_value+f'|{q_id}')
+                question.hit = F('hit') + 1
+                question.save()
+                question.refresh_from_db()
+        # hits 가 없는 경우
+        else:
+            new_hits_dict = (cookie_hits_key, q_id)
+            question.hit = F('hit') + 1
+            question.save()
+            question.refresh_from_db()
+
+        response = render(request, 'board/question_detail.html', context)
+
+        # 만료시간 설정
+        midnight = datetime.replace(datetime.now(), hour=23, minute=59, second=59)
+        expires = datetime.strftime(midnight, "%a, %d-%b-%Y %H:%M:%S GMT")
+
+        response.set_cookie(*new_hits_dict, expires=expires)
+        return response
+
