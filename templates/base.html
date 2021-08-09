@@ -1,19 +1,46 @@
 {% load static %}
 <!doctype html>
 <html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=0.7">
+    <meta name="description" content="Django로 만든 간단한 게시판입니다.">
+    <meta name="author" content="leeyongjoo">
 
-{% include "base_head.html" %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <!-- custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <!-- Font -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.rawgit.com/innks/NanumSquareRound/master/nanumsquareround.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <title>{% block title %}{% endblock %} : LYJ BOARD</title>
+</head>
 
 <body class="col-lg-8 mx-auto p-3 py-md-5">
 
+{% block header %}
 {% include "base_header.html" %}
+{% endblock %}
 
 <!-- 각 템플릿 안에 삽입될 내용 Start -->
 {% block content %}
 {% endblock %}
 <!-- 각 템플릿 안에 삽입될 내용 End -->
 
+{% block footer %}
 {% include "base_footer.html" %}
+{% endblock %}
+
 {% include "base_script.html" %}
 
 <!-- 자바스크립트 Start -->
