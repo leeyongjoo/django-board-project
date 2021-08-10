@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, F
@@ -103,9 +103,8 @@ def detail(request, question_id):
         response = render(request, 'board/question_detail.html', context)
 
         # 만료시간 설정
-        midnight = datetime.replace(datetime.now(), hour=23, minute=59, second=59)
-        expires = datetime.strftime(midnight, "%a, %d-%b-%Y %H:%M:%S GMT")
+        midnight_utc = datetime.replace(datetime.utcnow() + timedelta(days=1), hour=0, minute=0, second=0)
+        midnight_kst = midnight_utc - timedelta(hours=9)
 
-        response.set_cookie(*new_hits_dict, expires=expires)
+        response.set_cookie(*new_hits_dict, expires=midnight_kst)
         return response
-
