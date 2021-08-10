@@ -79,10 +79,10 @@ def detail(request, question_id):
             cookie_hits_key = 'hits_0'
 
         # 쿠키로부터 방문기록 로드
-        cookie_hits_value: str = request.COOKIES.get(cookie_hits_key, None)
+        cookie_hits_value: str = request.COOKIES.get(cookie_hits_key, '')
 
         # 쿠키에 cookie_hits_key 항목이 있는 경우
-        if cookie_hits_value is not None:
+        if cookie_hits_value != '':
             q_id_list = cookie_hits_value.split('|')
             # 방문한 경우는 그대로 응답
             if q_id in q_id_list:
