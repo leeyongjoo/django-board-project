@@ -106,5 +106,9 @@ def detail(request, question_id):
         midnight_utc = datetime.replace(datetime.utcnow() + timedelta(days=1), hour=0, minute=0, second=0)
         midnight_kst = midnight_utc - timedelta(hours=9)
 
-        response.set_cookie(*new_hits_dict, expires=midnight_kst)
+        response.set_cookie(*new_hits_dict,
+                            expires=midnight_kst,
+                            secure=True,
+                            httponly=True,
+                            samesite='Strict')
         return response
