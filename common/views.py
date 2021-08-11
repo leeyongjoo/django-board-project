@@ -1,6 +1,11 @@
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+from datetime import timedelta
 
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import LoginView
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+
+from common.decorators import keep_login
 from common.forms import UserForm
 
 
@@ -28,3 +33,11 @@ def page_not_found(request, exception):
     404 Page not found
     """
     return render(request, 'common/404.html', {})
+
+
+class CustomLoginView(LoginView):
+    template_name = 'common/login.html'
+
+    @method_decorator(keep_login)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
