@@ -103,12 +103,12 @@ def detail(request, question_id):
         response = render(request, 'board/question_detail.html', context)
 
         # 만료시간 설정
-        midnight_utc = datetime.replace(datetime.utcnow() + timedelta(days=1), hour=0, minute=0, second=0)
-        midnight_kst = midnight_utc - timedelta(hours=9)
+        midnight_kst = datetime.replace(datetime.utcnow() + timedelta(days=1, hours=9), hour=0, minute=0, second=0)
+        midnight_kst_to_utc = midnight_kst - timedelta(hours=9)
 
         response.set_cookie(*new_hits_dict,
-                            expires=midnight_kst,
-                            secure=True,
+                            expires=midnight_kst_to_utc,
+                            # secure=True,
                             httponly=True,
                             samesite='Strict')
         return response
