@@ -7,14 +7,14 @@
 
 ![screenshot](https://user-images.githubusercontent.com/46367323/137743169-b241f154-c5f3-4297-9b88-47179e806d1b.png)
 
-## Stack
+## 📚 Stacks
 
 - Bootstrap 5, Javascript
 - Django
 - Nginx, Gunicorn
 - AWS Lightsail
 
-## Feature
+## 🎨 Features
 
 `/common` : 공통 기능
 
@@ -37,9 +37,7 @@
 - 질문 조회수
     - 중복 방지
 
-## Description
-
-각 스택 별로 구현하거나 적용한 사항
+## 💬 Descriptions
 
 - FRONT (HTML, CSS, JS, Bootstrap 5)
     - 기존 jQuery 코드 Javascript 코드로 변경
