@@ -1,7 +1,6 @@
 # django-board-project
 
-> Django로 구현한 간단한 게시판
-> 
+Django로 구현한 간단한 게시판 📋
 
 🔗 [https://board.leeyongjoo.site](https://board.leeyongjoo.site/)
 
